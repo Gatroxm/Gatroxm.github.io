@@ -1,0 +1,168 @@
+[{
+  "_id": {
+    "$oid": "6656171cdad676a4421187c5"
+  },
+  "muestra": 130,
+  "fecha": "22 Mayo",
+  "hora": "12:19",
+  "descripcon": "Almuerzo chicharron con papas fritas",
+  "jornada": "Antes de Almuerzo",
+  "user": {
+    "$oid": "6650b3cd7f7b7689a8afa15c"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6656176cdad676a4421187c8"
+  },
+  "muestra": 265,
+  "fecha": "28 Mayo",
+  "hora": "12:41",
+  "descripcon": "",
+  "jornada": "Antes de Almuerzo",
+  "user": {
+    "$oid": "6650b3cd7f7b7689a8afa15c"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66561799dad676a4421187cb"
+  },
+  "muestra": 357,
+  "fecha": "27 Mayo",
+  "hora": "11:41",
+  "descripcon": "Me comí 80 gramos de carbohidratos y me puse 24 unidades de insulina",
+  "jornada": "Antes de Almuerzo",
+  "user": {
+    "$oid": "6650b3cd7f7b7689a8afa15c"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665617d1dad676a4421187ce"
+  },
+  "muestra": 84,
+  "fecha": "22 Mayo",
+  "hora": "13:30",
+  "descripcon": "",
+  "jornada": "2 horas despues de almuerzo",
+  "user": {
+    "$oid": "6650b3cd7f7b7689a8afa15c"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665617f5dad676a4421187d1"
+  },
+  "muestra": 163,
+  "fecha": "23 Mayo",
+  "hora": "14:55",
+  "descripcon": "Comeré carne y arroz",
+  "jornada": "Antes de Almuerzo",
+  "user": {
+    "$oid": "6650b3cd7f7b7689a8afa15c"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66561819dad676a4421187d4"
+  },
+  "muestra": 167,
+  "fecha": "23 Mayo",
+  "hora": "14:55",
+  "descripcon": "",
+  "jornada": "2 horas despues de almuerzo",
+  "user": {
+    "$oid": "6650b3cd7f7b7689a8afa15c"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6656183fdad676a4421187d7"
+  },
+  "muestra": 144,
+  "fecha": "23 Mayo",
+  "hora": "15:37",
+  "descripcon": "No he comido nada y me puse 24 unidades de insulina",
+  "jornada": "Antes de cenar",
+  "user": {
+    "$oid": "6650b3cd7f7b7689a8afa15c"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6656185ddad676a4421187da"
+  },
+  "muestra": 144,
+  "fecha": "23 Mayo",
+  "hora": "17:45",
+  "descripcon": "",
+  "jornada": "Antes de cenar",
+  "user": {
+    "$oid": "6650b3cd7f7b7689a8afa15c"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66561881dad676a4421187dd"
+  },
+  "muestra": 265,
+  "fecha": "24 Mayo",
+  "hora": "08:16",
+  "descripcon": "",
+  "jornada": "Ayunas",
+  "user": {
+    "$oid": "6650b3cd7f7b7689a8afa15c"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665618a3dad676a4421187e0"
+  },
+  "muestra": 209,
+  "fecha": "24 Mayo",
+  "hora": "11:18",
+  "descripcon": "Me como al desayuno un arroz con huevo",
+  "jornada": "Antes de Almuerzo",
+  "user": {
+    "$oid": "6650b3cd7f7b7689a8afa15c"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665618d2dad676a4421187e3"
+  },
+  "muestra": 116,
+  "fecha": "24 Mayo",
+  "hora": "16:22",
+  "descripcon": "Almorce pollo asado con 1 papa salada y 3 arepas",
+  "jornada": "2 horas despues de almuerzo",
+  "user": {
+    "$oid": "6650b3cd7f7b7689a8afa15c"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66561900dad676a4421187e6"
+  },
+  "muestra": 263,
+  "fecha": "27 Mayo",
+  "hora": "09:02",
+  "descripcon": "esta es una muestra de prueba",
+  "jornada": "Ayunas",
+  "user": {
+    "$oid": "6650b3cd7f7b7689a8afa15c"
+  },
+  "__v": 0
+}]
