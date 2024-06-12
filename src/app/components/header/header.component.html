@@ -1,0 +1,75 @@
+<header class="bg-six shadow text-white p-4 fixed w-full top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center">
+    <h1 class="text-4xl">Mi Portafolio</h1>
+    <nav class="hidden md:flex space-x-4">
+      <a
+        href="#presentacion"
+        (click)="scrollToSection($event, 'presentacion')"
+        class="hover:underline"
+        >Presentación</a
+      >
+      <a
+        href="#habilidades"
+        (click)="scrollToSection($event, 'habilidades')"
+        class="hover:underline"
+        >Habilidades</a
+      >
+      <a
+        href="#github"
+        (click)="scrollToSection($event, 'github')"
+        class="hover:underline"
+        >GitHub</a
+      >
+      <a
+        href="#cursos"
+        (click)="scrollToSection($event, 'cursos')"
+        class="hover:underline"
+        >Cursos</a
+      >
+    </nav>
+    <button class="md:hidden" (click)="toggleMenu()">
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        ></path>
+      </svg>
+    </button>
+  </div>
+  <div *ngIf="menuOpen" class="md:hidden">
+    <nav class="flex flex-col space-y-4 mt-4">
+      <a
+        href="#presentacion"
+        (click)="scrollToSection($event, 'presentacion')"
+        class="hover:underline"
+        >Presentación</a
+      >
+      <a
+        href="#habilidades"
+        (click)="scrollToSection($event, 'habilidades')"
+        class="hover:underline"
+        >Habilidades</a
+      >
+      <a
+        href="#github"
+        (click)="scrollToSection($event, 'github')"
+        class="hover:underline"
+        >GitHub</a
+      >
+      <a
+        href="#cursos"
+        (click)="scrollToSection($event, 'cursos')"
+        class="hover:underline"
+        >Cursos</a
+      >
+    </nav>
+  </div>
+</header>

@@ -1,110 +1,25 @@
-<div
-  class="flex flex-col md:flex-row items-center justify-between bg-gray-100 p-6"
->
-  <!-- Sección de Texto -->
-  <div class="w-full md:w-1/2 text-center md:text-left mb-4 md:mb-0">
-    <h1 class="text-4xl font-bold mb-2">Tu Nombre</h1>
-    <p class="text-gray-700 mb-4">
-      Breve descripción sobre ti. Soy un desarrollador web especializado en MERN
-      y MEAN.
-    </p>
-    <a
-      href="#contact"
-      class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >Contáctame</a
+<app-header></app-header>
+<main class="pt-20 bg-six lg:px-32">
+  <div class="container mx-auto y">
+    <section
+      id="presentacion"
+      class="opacity-0 transition-opacity duration-1000"
     >
+      <app-presentacion></app-presentacion>
+    </section>
+    <section
+      id="habilidades"
+      class="opacity-0 transition-opacity duration-1000"
+    >
+      <app-habilidades></app-habilidades>
+    </section>
+    <section id="github" class="opacity-0 transition-opacity duration-1000">
+      <app-github></app-github>
+    </section>
+    <section id="cursos" class="opacity-0 transition-opacity duration-1000">
+      <app-cursos></app-cursos>
+    </section>
   </div>
-  <!-- Sección de Imagen -->
-  <div class="w-full md:w-1/2 flex justify-center md:justify-end">
-    <img
-      src="./assets/img/FB_IMG_1618059924387.jpg"
-      alt="Tu Foto"
-      class="rounded-full w-48 h-48 object-cover"
-    />
-  </div>
-</div>
-<div class="bg-gray-100 p-6">
-  <h2 class="text-3xl font-bold text-center mb-8">Mis Habilidades</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div>
-      <h3 class="text-xl font-semibold">JavaScript</h3>
-      <div class="bg-gray-300 rounded-full h-4">
-        <div class="bg-blue-500 h-4 rounded-full" style="width: 90%"></div>
-      </div>
-    </div>
-    <div>
-      <h3 class="text-xl font-semibold">Angular</h3>
-      <div class="bg-gray-300 rounded-full h-4">
-        <div class="bg-blue-500 h-4 rounded-full" style="width: 80%"></div>
-      </div>
-    </div>
-    <div>
-      <h3 class="text-xl font-semibold">React.js</h3>
-      <div class="bg-gray-300 rounded-full h-4">
-        <div class="bg-blue-500 h-4 rounded-full" style="width: 75%"></div>
-      </div>
-    </div>
-    <div>
-      <h3 class="text-xl font-semibold">TypeScript</h3>
-      <div class="bg-gray-300 rounded-full h-4">
-        <div class="bg-blue-500 h-4 rounded-full" style="width: 85%"></div>
-      </div>
-    </div>
-    <div>
-      <h3 class="text-xl font-semibold">Express</h3>
-      <div class="bg-gray-300 rounded-full h-4">
-        <div class="bg-blue-500 h-4 rounded-full" style="width: 70%"></div>
-      </div>
-    </div>
-    <div>
-      <h3 class="text-xl font-semibold">MongoDB</h3>
-      <div class="bg-gray-300 rounded-full h-4">
-        <div class="bg-blue-500 h-4 rounded-full" style="width: 75%"></div>
-      </div>
-    </div>
-    <div>
-      <h3 class="text-xl font-semibold">HTML5</h3>
-      <div class="bg-gray-300 rounded-full h-4">
-        <div class="bg-blue-500 h-4 rounded-full" style="width: 95%"></div>
-      </div>
-    </div>
-    <div>
-      <h3 class="text-xl font-semibold">CSS3</h3>
-      <div class="bg-gray-300 rounded-full h-4">
-        <div class="bg-blue-500 h-4 rounded-full" style="width: 90%"></div>
-      </div>
-    </div>
-    <div>
-      <h3 class="text-xl font-semibold">Sass</h3>
-      <div class="bg-gray-300 rounded-full h-4">
-        <div class="bg-blue-500 h-4 rounded-full" style="width: 80%"></div>
-      </div>
-    </div>
-    <div>
-      <h3 class="text-xl font-semibold">Less</h3>
-      <div class="bg-gray-300 rounded-full h-4">
-        <div class="bg-blue-500 h-4 rounded-full" style="width: 60%"></div>
-      </div>
-    </div>
-    <div>
-      <h3 class="text-xl font-semibold">WordPress</h3>
-      <div class="bg-gray-300 rounded-full h-4">
-        <div class="bg-blue-500 h-4 rounded-full" style="width: 70%"></div>
-      </div>
-    </div>
-    <div>
-      <h3 class="text-xl font-semibold">PHP</h3>
-      <div class="bg-gray-300 rounded-full h-4">
-        <div class="bg-blue-500 h-4 rounded-full" style="width: 65%"></div>
-      </div>
-    </div>
-    <div>
-      <h3 class="text-xl font-semibold">GitHub</h3>
-      <div class="bg-gray-300 rounded-full h-4">
-        <div class="bg-blue-500 h-4 rounded-full" style="width: 85%"></div>
-      </div>
-    </div>
-  </div>
-</div>
-<app-github></app-github>
-<router-outlet />
+</main>
+<app-footer></app-footer>
+<router-outlet></router-outlet>

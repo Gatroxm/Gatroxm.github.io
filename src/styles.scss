@@ -2,3 +2,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --gamr-color-one: #A224BE;
+  --gamr-color-two: #BD243B;
+  --gamr-color-three: #831968;
+  --gamr-color-four: #5D1EA0;
+  --gamr-color-five: #BC3824;
+  --gamr-color-six: #000;
+}
+/* Estilos globales para la animación de aparición */
+section.opacity-0 {
+  opacity: 0;
+  &.opacity-100 {
+    opacity: 1;
+    transition: opacity 1s;
+  }
+}
+
+/* Espaciado para que el contenido no quede debajo del header */
+main {
+  padding-top: 5rem; /* Ajusta según el tamaño del header */
+}
