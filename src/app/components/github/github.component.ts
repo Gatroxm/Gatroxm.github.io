@@ -19,7 +19,6 @@ export default class GithubComponent implements OnInit {
   ngOnInit(): void {
     this.githubService.getRepos().subscribe(
       (data) => {
-        // console.log('Repos:', data);
         this.repos = data;
       },
       (error) => console.error('Error fetching the repos:', error)

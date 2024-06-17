@@ -1,79 +1,115 @@
-import { NgFor, NgStyle } from '@angular/common';
+import { NgFor, NgStyle, UpperCasePipe } from '@angular/common';
 import { Component } from '@angular/core';
 
+interface Habilidad {
+  icon: string;
+  name: string;
+}
 @Component({
   selector: 'app-habilidades',
   standalone: true,
-  imports: [NgFor, NgStyle],
+  imports: [NgFor, NgStyle, UpperCasePipe],
   templateUrl: './habilidades.component.html',
   styleUrl: './habilidades.component.scss',
 })
 export default class HabilidadesComponent {
-  habilidades = [
+  habilidades: Habilidad[] = [
     {
-      name: 'JavaScript',
-      description: 'Lenguaje de programación de código abierto',
-      percent: 90,
-    },
-    {
+      icon: 'angular.svg',
       name: 'Angular',
-      description: 'Framework de desarrollo web',
-      percent: 80,
     },
     {
-      name: 'React.js',
-      description: 'Framework de desarrollo web',
-      percent: 60,
+      icon: 'html.svg',
+      name: 'HTML',
     },
     {
-      name: 'TypeScript',
-      description: 'Lenguaje de programación de código abierto',
-      percent: 80,
+      icon: 'css3.svg',
+      name: 'CSS',
     },
     {
+      icon: 'js.svg',
+      name: 'Javascript',
+    },
+
+    {
+      icon: 'nodejs.svg',
+      name: 'Nodejs',
+    },
+    {
+      icon: 'bootstrap.svg',
+      name: 'Bootstrap',
+    },
+    {
+      icon: 'bitbucket.svg',
+      name: 'Bitbucket',
+    },
+    {
+      icon: 'github.svg',
+      name: 'Github',
+    },
+    {
+      icon: 'express.svg',
       name: 'Express',
-      description: 'Framework web',
-      percent: 70,
     },
     {
-      name: 'MongoDB',
-      description: 'Base de datos',
-      percent: 60,
+      icon: 'sql.svg',
+      name: 'SQL',
     },
     {
-      name: 'HTML5',
-      description: 'Lenguaje de marcado',
-      percent: 100,
+      icon: 'mysql.svg',
+      name: 'Mysql',
     },
     {
-      name: 'CSS3',
-      description: 'Lenguaje de marcado',
-      percent: 95,
+      icon: 'mongodb.svg',
+      name: 'Mongodb',
     },
     {
-      name: 'Sass',
-      description: 'Lenguaje de programación de código abierto',
-      percent: 100,
+      icon: 'java.svg',
+      name: 'Java',
     },
     {
-      name: 'Less',
-      description: 'Lenguaje de programación de código abierto',
-      percent: 90,
+      icon: 'ts.svg',
+      name: 'Typescript',
     },
     {
-      name: 'WordPress',
-      description: 'Sistema de gestión de contenido',
-      percent: 60,
+      icon: 'jira.svg',
+      name: 'Jira',
     },
     {
+      icon: 'laravel.svg',
+      name: 'Laravel',
+    },
+    {
+      icon: 'php.svg',
       name: 'PHP',
-      description: 'Lenguaje de programación',
-      percent: 60,
     },
     {
-      name: 'GitHub',
-      description: 'Sistema de control de versiones',
-      percent: 75,
+      icon: 'less.svg',
+      name: 'Less',
+    },
+    {
+      icon: 'sass.svg',
+      name: 'Sass',
+    },
+    {
+      icon: 'mongodb.svg',
+      name: 'Mongodb',
+    },
+    {
+      icon: 'nestjs.svg',
+      name: 'Nestjs',
+    },
+    {
+      icon: 'reactjs.svg',
+      name: 'React',
+    },
+    {
+      icon: 'scrum.svg',
+      name: 'SCRUM',
+    },
+    {
+      icon: 'wordpress.svg',
+      name: 'Wordpress',
     },
   ];
 }

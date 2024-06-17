@@ -1,0 +1,11 @@
+.cart-text{
+    display: none;
+    transition: all 0.5s ease-in-out;
+}
+.content-habilidad{
+    &:hover{
+        .cart-text{
+            display: flex;
+        }
+    }
+}

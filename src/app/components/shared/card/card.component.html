@@ -1,12 +1,12 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-  <div *ngFor="let repo of repos" class="bg-white p-4 rounded-lg shadow-md">
+  <div *ngFor="let repo of repos" class="p-4 rounded-lg shadow-md">
     <h3 class="text-xl text-one font-semibold mb-2 h-12">{{ repo.name }}</h3>
     <p class="text-two mb-4">{{ repo.description }}</p>
     <a
       [href]="repo.html_url"
       target="_blank"
       rel="noopener noreferrer "
-      class="text-three hover:underline"
+      class="text-two hover:underline"
     >
       Ver
     </a>
