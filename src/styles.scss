@@ -7,6 +7,9 @@
   --gamr-color-one: #b5b500;
   --gamr-color-two: #cdcd99;
 }
+body {
+  background-color: #000;
+}
 /* Estilos globales para la animación de aparición */
 section.opacity-0 {
   opacity: 0;
