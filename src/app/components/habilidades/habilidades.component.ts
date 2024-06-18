@@ -60,10 +60,6 @@ export default class HabilidadesComponent {
       name: 'Mysql',
     },
     {
-      icon: 'mongodb.svg',
-      name: 'Mongodb',
-    },
-    {
       icon: 'java.svg',
       name: 'Java',
     },
