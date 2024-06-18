@@ -10,7 +10,9 @@ module.exports = {
       },
       colors: {
         one: 'var(--gamr-color-one)',
+        one_pacity: 'var(--gamr-color-one-opacity) ',
         two: 'var(--gamr-color-two) ',
+        two_opacity: 'var(--gamr-color-two-opacity) ',
       },
     },
   },
