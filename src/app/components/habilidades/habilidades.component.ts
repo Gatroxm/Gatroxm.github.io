@@ -52,12 +52,20 @@ export default class HabilidadesComponent {
       name: 'Express',
     },
     {
+      icon: 'woocommerce.svg',
+      name: 'Woocommerce',
+    },
+    {
       icon: 'sql.svg',
       name: 'SQL',
     },
     {
       icon: 'mysql.svg',
       name: 'Mysql',
+    },
+    {
+      icon: 'shopify.svg',
+      name: 'Shopify',
     },
     {
       icon: 'java.svg',
