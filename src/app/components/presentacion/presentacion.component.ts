@@ -1,18 +1,17 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import ModalComponent from '../shared/modal/modal.component';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-presentacion',
-  standalone: true,
-  imports: [ModalComponent, NgIf],
+  imports: [ModalComponent],
   templateUrl: './presentacion.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './presentacion.component.scss',
 })
 export default class PresentacionComponent {
   public modal: boolean = false;
 
-  closeModal(event: any) {
+  closeModal() {
     this.modal = false;
   }
 }

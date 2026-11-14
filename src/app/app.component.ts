@@ -1,4 +1,10 @@
-import { Component, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  PLATFORM_ID,
+  ChangeDetectionStrategy,
+  inject,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import GithubComponent from './components/github/github.component';
@@ -10,7 +16,6 @@ import HeaderComponent from './components/header/header.component';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
     RouterOutlet,
     GithubComponent,
@@ -21,10 +26,11 @@ import HeaderComponent from './components/header/header.component';
     HeaderComponent,
   ],
   templateUrl: './app.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements AfterViewInit {
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  private platformId = inject(PLATFORM_ID);
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {

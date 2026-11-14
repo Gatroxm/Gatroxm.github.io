@@ -1,14 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { cp } from 'fs';
-import { NgFor, NgIf } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { GithubService } from '../../services/github.service';
-import CardComponent from '../shared/card/card.component';
 
 @Component({
   selector: 'app-github',
-  standalone: true,
-  imports: [NgIf, NgFor, CardComponent],
   templateUrl: './github.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './github.component.scss',
 })
 export default class GithubComponent implements OnInit {

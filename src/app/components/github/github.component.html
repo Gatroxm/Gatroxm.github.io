@@ -3,16 +3,18 @@
     Repositories GitHub
   </h2>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div *ngFor="let repo of repos" class="">
-      <h3 class="text-xl text-one font-semibold">
-        <a
-          [href]="repo.html_url"
-          target="_blank"
-          rel="noopener noreferrer "
-          class="text-two hover:underline"
-          >{{ repo.name }}
-        </a>
-      </h3>
-    </div>
+    @for (repo of repos; track repo.id) {
+      <div class="">
+        <h3 class="text-xl text-one font-semibold">
+          <a
+            [href]="repo.html_url"
+            target="_blank"
+            rel="noopener noreferrer "
+            class="text-two hover:underline"
+            >{{ repo.name }}
+          </a>
+        </h3>
+      </div>
+    }
   </div>
 </div>

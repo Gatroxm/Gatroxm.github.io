@@ -1,15 +1,16 @@
-import { NgFor, NgStyle, UpperCasePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { UpperCasePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 interface Habilidad {
   icon: string;
   name: string;
 }
+
 @Component({
   selector: 'app-habilidades',
-  standalone: true,
-  imports: [NgFor, NgStyle, UpperCasePipe],
+  imports: [UpperCasePipe],
   templateUrl: './habilidades.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './habilidades.component.scss',
 })
 export default class HabilidadesComponent {
@@ -30,7 +31,6 @@ export default class HabilidadesComponent {
       icon: 'js.svg',
       name: 'Javascript',
     },
-
     {
       icon: 'nodejs.svg',
       name: 'Nodejs',

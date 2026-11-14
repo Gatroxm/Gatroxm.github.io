@@ -1,5 +1,4 @@
-import { NgFor } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import CardComponent from '../shared/card/card.component';
 
 interface Course {
@@ -10,9 +9,9 @@ interface Course {
 
 @Component({
   selector: 'app-cursos',
-  standalone: true,
-  imports: [NgFor, CardComponent],
+  imports: [CardComponent],
   templateUrl: './cursos.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './cursos.component.scss',
 })
 export default class CursosComponent {

@@ -1,11 +1,14 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import {} from 'node:stream';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 
 @Component({
   selector: 'app-modal',
-  standalone: true,
-  imports: [],
   templateUrl: './modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './modal.component.scss',
 })
 export default class ModalComponent {
