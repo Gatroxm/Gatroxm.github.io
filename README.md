@@ -1,27 +1,72 @@
-# Portafolio
+# GatroxM.dev — Portafolio de Gustavo Adolfo Muñoz Reyes
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.7.
+Sitio estático de una sola página con HTML, CSS y JavaScript (módulos ES). No
+necesita build, dependencias ni backend. Se publica con GitHub Pages desde
+`docs/`, igual que la versión anterior, así que no hay que cambiar la
+configuración del repositorio.
 
-## Development server
+## Estructura
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+```
+docs/index.html                  Estructura, SEO, hero y secciones
+docs/css/styles.css              Sistema de diseño, temas y responsive
+docs/js/main.js                  Render del contenido e interacciones
+docs/data/content.js             Todo el contenido editable
+docs/assets/favicon.svg          Favicon
+docs/assets/og-image.png         Imagen para Open Graph
+docs/Hoja_de_Vida_...pdf         Hoja de vida descargable
+docs/.nojekyll                   Evita el procesamiento de Jekyll
+prototype/index.html             Prototipo original de referencia
+```
 
-## Code scaffolding
+El proyecto Angular anterior sigue intacto en la raíz del repositorio y en la
+rama `legacy-angular`.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Editar el contenido
 
-## Build
+- **Datos y textos de secciones:** `docs/data/content.js` (perfil, cifras, sobre
+  mí, habilidades, experiencia, formación y contacto).
+- **Hero, títulos de sección y metadatos:** `docs/index.html`.
+- **Colores, tipografía y espaciados:** variables y reglas en
+  `docs/css/styles.css`.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Después de editar, recarga el navegador; no hay compilación.
 
-## Running unit tests
+## Probar en local
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Los módulos ES no funcionan abriendo el archivo con `file://`. Usa un servidor
+estático apuntando a `docs/`:
 
-## Running end-to-end tests
+```bash
+npx serve docs
+# o
+python -m http.server 8080 --directory docs
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Luego abre `http://localhost:3000` o `http://localhost:8080`.
 
-## Further help
+## Publicar en GitHub Pages
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+No hay que tocar la configuración de Pages: el sitio vive en `docs/`, que es la
+carpeta que el repositorio ya publica.
+
+1. Integra los cambios de `portfolio-v2` en `main` y haz push.
+2. GitHub Pages publica `main /docs` automáticamente.
+
+El archivo `docs/.nojekyll` evita que Jekyll procese el sitio.
+
+## Ramas
+
+- `portfolio-v2`: sitio estático actual, dentro de `docs/`.
+- `legacy-angular`: versión anterior del portafolio en Angular 22, conservada
+  como referencia.
+
+## Accesibilidad y rendimiento
+
+- HTML semántico, un solo `h1`, jerarquía de encabezados y enlaces de salto.
+- Acordeones con `aria-expanded` y `aria-controls`, navegación completa por
+  teclado y foco visible.
+- Tema claro/oscuro con `prefers-color-scheme`; si `localStorage` falla, la
+  página sigue funcionando.
+- Animaciones desactivadas con `prefers-reduced-motion`.
+- Sin fuentes, scripts ni imágenes externas.
