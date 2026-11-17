@@ -222,6 +222,12 @@ document.addEventListener("click", async (event) => {
   }
 });
 
+window.addEventListener("hashchange", () => {
+  if (window.location.hash === "#world" && document.body.dataset.mode !== "world") {
+    void showWorld();
+  }
+});
+
 if (window.location.hash === "#world") {
   void showWorld();
 } else if (!hasWebGL()) {

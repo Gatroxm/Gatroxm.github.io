@@ -17,6 +17,8 @@ export interface WorldBuild {
   checkpoints: THREE.Mesh[];
   checkpointHalos: THREE.Mesh[];
   jobMarkers: THREE.Mesh[];
+  jobPositions: THREE.Vector3[];
+  zoneRings: Array<THREE.Mesh | null>;
 }
 
 function standard(color: number, emissive = 0): THREE.MeshStandardMaterial {
@@ -281,9 +283,25 @@ export function buildWorld(scene: THREE.Scene, quality: Quality): WorldBuild {
   );
   scene.add(routeLine);
 
+  if (settings.accents) {
+    const arrowGeometry = new THREE.ConeGeometry(0.34, 1.1, 6);
+    const arrowMaterial = glow(PALETTE.blue, 0.5);
+    const up = new THREE.Vector3(0, 1, 0);
+    for (let index = 0; index < 14; index += 1) {
+      const t = index / 14;
+      const arrow = new THREE.Mesh(arrowGeometry, arrowMaterial);
+      arrow.position.copy(route.getPointAt(t));
+      arrow.position.y = 0.12;
+      arrow.quaternion.setFromUnitVectors(up, route.getTangentAt(t));
+      scene.add(arrow);
+    }
+  }
+
   const checkpoints: THREE.Mesh[] = [];
   const checkpointHalos: THREE.Mesh[] = [];
   const jobMarkers: THREE.Mesh[] = [];
+  const jobPositions: THREE.Vector3[] = [];
+  const zoneRings: Array<THREE.Mesh | null> = [];
 
   ZONES.forEach((zone) => {
     const group = new THREE.Group();
@@ -293,6 +311,19 @@ export function buildWorld(scene: THREE.Scene, quality: Quality): WorldBuild {
     const label = labelSprite(zone.label);
     label.position.set(0, zone.kind === "antenna" ? 11 : zone.height + 2.2, 0);
     group.add(label);
+
+    let zoneRing: THREE.Mesh | null = null;
+    if (zone.kind !== "plaza") {
+      zoneRing = new THREE.Mesh(
+        new THREE.TorusGeometry(zone.radius * 0.62, 0.06, 8, 48),
+        glow(PALETTE.blue, 0.6),
+      );
+      zoneRing.rotation.x = -Math.PI / 2;
+      zoneRing.position.y = 0.05;
+      zoneRing.visible = false;
+      group.add(zoneRing);
+    }
+    zoneRings.push(zoneRing);
 
     scene.add(group);
     markers[zone.id] = group;
@@ -315,7 +346,12 @@ export function buildWorld(scene: THREE.Scene, quality: Quality): WorldBuild {
     });
     JOB_LABELS.forEach((_, index) => {
       const marker = group.getObjectByName(`job-${index}`);
-      if (marker instanceof THREE.Mesh) jobMarkers.push(marker);
+      if (marker instanceof THREE.Mesh) {
+        jobMarkers.push(marker);
+        jobPositions.push(
+          new THREE.Vector3(zone.x + marker.position.x, 0, zone.z + marker.position.z),
+        );
+      }
     });
   });
 
@@ -334,5 +370,13 @@ export function buildWorld(scene: THREE.Scene, quality: Quality): WorldBuild {
   centerLight.position.set(0, 7, 0);
   scene.add(centerLight);
 
-  return { obstacles, markers, checkpoints, checkpointHalos, jobMarkers };
+  return {
+    obstacles,
+    markers,
+    checkpoints,
+    checkpointHalos,
+    jobMarkers,
+    jobPositions,
+    zoneRings,
+  };
 }

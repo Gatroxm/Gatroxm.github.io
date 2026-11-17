@@ -37,6 +37,29 @@ function nextFrame(): Promise<void> {
   return new Promise((resolve) => requestAnimationFrame(() => resolve()));
 }
 
+/** Libera geometrías, materiales y texturas al abandonar la experiencia 3D. */
+function disposeScene(scene: THREE.Scene): void {
+  const geometries = new Set<THREE.BufferGeometry>();
+  const materials = new Set<THREE.Material>();
+  const textures = new Set<THREE.Texture>();
+
+  scene.traverse((object) => {
+    const drawable = object as THREE.Mesh;
+    if (drawable.geometry) geometries.add(drawable.geometry);
+    const material = drawable.material;
+    if (Array.isArray(material)) material.forEach((item) => materials.add(item));
+    else if (material) materials.add(material);
+  });
+
+  geometries.forEach((geometry) => geometry.dispose());
+  materials.forEach((material) => {
+    const map = (material as THREE.Material & { map?: THREE.Texture | null }).map;
+    if (map) textures.add(map);
+    material.dispose();
+  });
+  textures.forEach((texture) => texture.dispose());
+}
+
 export async function startWorld(): Promise<WorldController> {
   const canvas = document.querySelector<HTMLCanvasElement>("#scene");
   const loading = document.querySelector<HTMLElement>("#loading");
@@ -242,7 +265,6 @@ export async function startWorld(): Promise<WorldController> {
   const forward = new THREE.Vector3();
   const desired = new THREE.Vector3();
   const lookAt = new THREE.Vector3();
-  const markerWorld = new THREE.Vector3();
 
   const animate = () => {
     if (disposed) return;
@@ -270,19 +292,26 @@ export async function startWorld(): Promise<WorldController> {
     camera.lookAt(lookAt);
 
     let nearest = ZONES[0];
-    let nearestDistance = Number.POSITIVE_INFINITY;
-    for (const zone of ZONES) {
-      const distance = Math.hypot(zone.x - vehicle.position.x, zone.z - vehicle.position.z);
-      if (distance < nearestDistance) {
+    let nearestIndex = 0;
+    let nearestDistanceSq = Number.POSITIVE_INFINITY;
+    for (let index = 0; index < ZONES.length; index += 1) {
+      const zone = ZONES[index];
+      const dx = zone.x - vehicle.position.x;
+      const dz = zone.z - vehicle.position.z;
+      const distanceSq = dx * dx + dz * dz;
+      if (distanceSq < nearestDistanceSq) {
         nearest = zone;
-        nearestDistance = distance;
+        nearestIndex = index;
+        nearestDistanceSq = distanceSq;
       }
     }
 
-    if (nearestDistance <= nearest.radius + 3) {
+    if (nearestDistanceSq <= (nearest.radius + 3) ** 2) {
       nearestZoneId = nearest.id;
       if (!visitedZones.has(nearest.id)) {
         visitedZones.add(nearest.id);
+        const ring = world.zoneRings[nearestIndex];
+        if (ring) ring.visible = true;
         if (zoneCount) zoneCount.textContent = `${visitedZones.size} / ${ZONES.length}`;
       }
       if (!activePanel) {
@@ -294,15 +323,21 @@ export async function startWorld(): Promise<WorldController> {
       hint.hidden = true;
     }
 
-    for (const marker of world.jobMarkers) {
-      marker.getWorldPosition(markerWorld);
-      const distance = Math.hypot(
-        markerWorld.x - vehicle.position.x,
-        markerWorld.z - vehicle.position.z,
-      );
-      const target = distance < 4 ? 1.25 : 1;
-      const scale = marker.scale.x + (target - marker.scale.x) * 0.15;
-      marker.scale.setScalar(scale);
+    for (let index = 0; index < world.jobMarkers.length; index += 1) {
+      const position = world.jobPositions[index];
+      if (!position) continue;
+      const dx = position.x - vehicle.position.x;
+      const dz = position.z - vehicle.position.z;
+      const target = dx * dx + dz * dz < 16 ? 1.25 : 1;
+      const scale = world.jobMarkers[index].scale.x + (target - world.jobMarkers[index].scale.x) * 0.15;
+      world.jobMarkers[index].scale.setScalar(scale);
+    }
+
+    if (!reducedMotion) {
+      const pulse = 1 + Math.sin(performance.now() / 420) * 0.12;
+      world.checkpointHalos.forEach((halo, index) => {
+        if (circuit.visited.has(index)) halo.scale.setScalar(pulse);
+      });
     }
 
     renderer.render(scene, camera);
@@ -328,6 +363,7 @@ export async function startWorld(): Promise<WorldController> {
       document.removeEventListener("keydown", onEscape);
       window.removeEventListener("resize", onResize);
       scene.background = null;
+      disposeScene(scene);
       renderer.dispose();
     },
   };
