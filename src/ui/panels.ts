@@ -41,6 +41,7 @@ const panels: Record<string, ZonePanel> = {
     eyebrow: "Zona 03 · Circuito de IA",
     title: "Cómo trabajan mis agentes",
     body: `<p>Cuatro puntos de control: del requerimiento a la implementación, pasando por MCP y Graphify.</p>
+      <p class="circuit-progress" data-panel-circuit>0 de 4 pasos completados</p>
       <div class="flow">${flowHTML()}</div>
       <p class="hint">${stats[2].text}: ${stats[2].label}.</p>`,
   },

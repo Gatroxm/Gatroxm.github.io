@@ -46,6 +46,24 @@ export const ZONES: ZoneDefinition[] = [
   { id: "contacto", label: "Contacto", x: -21, z: 15, radius: 4.5, height: 9, kind: "antenna" },
 ];
 
+/**
+ * Puntos de control del circuito de agentes, en el orden del flujo real:
+ * Requerimiento → MCP → Graphify → Implementación.
+ * Coinciden con los cuatro faros de la zona «Agentes de IA».
+ */
+export const CHECKPOINTS: ReadonlyArray<{ id: string; x: number; z: number }> = [
+  { id: "requerimiento", x: -9, z: -20 },
+  { id: "mcp", x: -4, z: -25 },
+  { id: "graphify", x: 1, z: -20 },
+  { id: "implementacion", x: -4, z: -15 },
+];
+
+/** Cargo corto para la etiqueta de cada hito de la avenida. */
+export const JOB_LABELS: readonly string[] = [
+  "APERCE", "BTW", "UX Tech", "Vortex", "Tuatara", "Imagemaker",
+  "Xpectrum", "Grupo FG", "SMDigital", "Strategee", "2014–2016",
+];
+
 export const ISLAND_RADIUS = 46;
 export const SPAWN = { x: 0, z: 10 };
 

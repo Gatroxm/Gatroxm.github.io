@@ -209,6 +209,13 @@ svg { display: block; }
   font-size: 0.8rem; cursor: pointer;
 }
 .hud-select option { background: var(--navy); color: var(--cloud); }
+.hud-progress {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 0.4rem 0.7rem; border: 1px solid var(--line);
+  border-radius: var(--radius-sm); background: color-mix(in srgb, var(--navy) 78%, transparent);
+}
+.hud-progress-label { color: var(--muted); font-size: 0.72rem; }
+.hud-progress strong { color: var(--cloud); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
 
 .zone-hint {
   position: absolute; left: 50%; bottom: 26px; z-index: 9;
@@ -217,6 +224,48 @@ svg { display: block; }
   border-radius: 999px; background: color-mix(in srgb, var(--navy) 88%, transparent);
   color: var(--cloud); font-size: 0.82rem; white-space: nowrap;
 }
+
+/* Circuito de agentes y minimapa (Fase 2). */
+.circuit-card, .minimap {
+  position: absolute; z-index: 12; color: var(--cloud);
+  background: color-mix(in srgb, var(--navy) 92%, transparent);
+  border: 1px solid var(--line-strong); border-radius: var(--radius);
+  box-shadow: var(--shadow); backdrop-filter: blur(6px);
+}
+.circuit-card { top: 72px; left: 20px; width: min(330px, calc(100% - 40px)); padding: 16px; }
+.circuit-head { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; }
+.circuit-head h3 { font-size: 1rem; line-height: 1.25; }
+.circuit-head .eyebrow { font-size: 0.65rem; }
+.circuit-status, .circuit-progress {
+  margin: 10px 0; padding: 6px 8px; border-left: 2px solid var(--accent);
+  background: var(--surface-soft); color: var(--cloud); font-size: 0.8rem;
+}
+.circuit-steps { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.circuit-steps li {
+  display: flex; align-items: center; gap: 9px; padding: 6px 8px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  font-size: 0.78rem; color: var(--muted);
+}
+.circuit-steps li[data-done="true"] { border-color: var(--accent); color: var(--cloud); }
+.circuit-step-num {
+  display: inline-grid; place-items: center; flex: 0 0 20px; height: 20px;
+  border: 1px solid var(--line-strong); border-radius: 50%; font-size: 0.7rem;
+}
+.circuit-steps li[data-done="true"] .circuit-step-num { background: var(--accent); border-color: var(--accent); color: var(--white); }
+.circuit-detail {
+  margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line);
+  color: var(--accent-text); font-size: 0.8rem;
+}
+
+.minimap { right: 20px; bottom: 24px; width: 244px; padding: 12px; }
+.minimap-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.minimap-head strong { font-size: 0.85rem; }
+.minimap canvas { display: block; width: 220px; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.minimap-legend { display: flex; align-items: center; gap: 6px; margin: 10px 0 0; color: var(--muted); font-size: 0.72rem; }
+.minimap-hint { margin: 6px 0 0; color: var(--muted); font-size: 0.7rem; }
+.dot { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--gray); }
+.dot--visited { background: var(--blue); border-color: var(--blue); }
+.dot--pending { background: var(--navy); }
 
 .zone-panel {
   position: absolute; top: 0; right: 0; bottom: 0; z-index: 15;
@@ -472,6 +521,9 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   .hero { min-height: auto; padding-top: 112px; }
   .section { padding-top: 64px; }
   .zone-panel { width: min(420px, 100%); }
+  .circuit-card { top: 64px; left: 12px; width: min(290px, calc(100% - 24px)); padding: 12px; }
+  .minimap { right: 12px; bottom: 16px; width: 202px; padding: 10px; }
+  .minimap canvas { width: 180px; }
 }
 
 @media (max-width: 560px) {
@@ -486,6 +538,11 @@ html[data-theme="light"] .theme-toggle .icon-sun { display: block; }
   .hud-btn, .hud-select { font-size: 0.72rem; padding: 0.35rem 0.55rem; }
   .zone-panel-inner { padding: 20px 16px 32px; }
   .zone-panel-head h2 { font-size: 1.2rem; }
+  .hud-progress-label { display: none; }
+  .circuit-card { top: 58px; left: 8px; width: calc(100% - 16px); max-width: 270px; }
+  .minimap { right: 8px; bottom: 12px; width: 176px; }
+  .minimap canvas { width: 154px; }
+  .minimap-legend, .minimap-hint { display: none; }
 }
 
 @media (pointer: coarse) {

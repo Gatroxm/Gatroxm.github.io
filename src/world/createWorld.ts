@@ -1,6 +1,9 @@
 import * as THREE from "three";
+import { about, skills } from "../data/content";
 import {
+  CHECKPOINTS,
   ISLAND_RADIUS,
+  JOB_LABELS,
   PALETTE,
   QUALITY,
   type Quality,
@@ -11,6 +14,9 @@ import {
 export interface WorldBuild {
   obstacles: THREE.Box3[];
   markers: Record<string, THREE.Object3D>;
+  checkpoints: THREE.Mesh[];
+  checkpointHalos: THREE.Mesh[];
+  jobMarkers: THREE.Mesh[];
 }
 
 function standard(color: number, emissive = 0): THREE.MeshStandardMaterial {
@@ -39,7 +45,7 @@ function addEdges(mesh: THREE.Mesh, color = PALETTE.blue, opacity = 0.7): void {
   mesh.add(edges);
 }
 
-function labelSprite(text: string): THREE.Sprite {
+function labelSprite(text: string, width = 8, height = 2): THREE.Sprite {
   const canvas = document.createElement("canvas");
   canvas.width = 512;
   canvas.height = 128;
@@ -50,7 +56,8 @@ function labelSprite(text: string): THREE.Sprite {
   ctx.lineWidth = 6;
   ctx.strokeRect(3, 3, canvas.width - 6, canvas.height - 6);
   ctx.fillStyle = "#F1F5F9";
-  ctx.font = "bold 46px system-ui, sans-serif";
+  const fontSize = Math.max(18, Math.min(46, Math.floor(900 / Math.max(1, text.length))));
+  ctx.font = `bold ${fontSize}px system-ui, sans-serif`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillText(text, canvas.width / 2, canvas.height / 2);
@@ -60,7 +67,7 @@ function labelSprite(text: string): THREE.Sprite {
   const sprite = new THREE.Sprite(
     new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false }),
   );
-  sprite.scale.set(8, 2, 1);
+  sprite.scale.set(width, height, 1);
   return sprite;
 }
 
@@ -93,7 +100,7 @@ function brandSign(): THREE.Mesh {
   return sign;
 }
 
-function buildStructure(zone: ZoneDefinition, group: THREE.Group): void {
+function buildStructure(zone: ZoneDefinition, group: THREE.Group, detailed: boolean): void {
   const dark = standard(PALETTE.dark);
   const blue = glow(PALETTE.blue);
 
@@ -130,52 +137,87 @@ function buildStructure(zone: ZoneDefinition, group: THREE.Group): void {
       break;
     }
     case "circuit": {
-      for (let i = 0; i < 4; i += 1) {
-        const angle = (i / 4) * Math.PI * 2;
-        const x = Math.cos(angle) * 5;
-        const z = Math.sin(angle) * 5;
-        const beacon = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.8, 2.6, 8), standard(PALETTE.dark, PALETTE.blue));
-        beacon.position.set(x, 1.3, z);
+      CHECKPOINTS.forEach((checkpoint, index) => {
+        const localX = checkpoint.x - zone.x;
+        const localZ = checkpoint.z - zone.z;
+        const beacon = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.5, 0.8, 2.6, 8),
+          standard(PALETTE.dark, PALETTE.blue),
+        );
+        beacon.name = `checkpoint-${index}`;
+        beacon.position.set(localX, 1.3, localZ);
+        beacon.castShadow = true;
         group.add(beacon);
-        const halo = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.07, 8, 32), blue);
+
+        const halo = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.07, 8, 32), blue.clone());
+        halo.name = `checkpoint-halo-${index}`;
         halo.rotation.x = -Math.PI / 2;
-        halo.position.set(x, 0.06, z);
+        halo.position.set(localX, 0.06, localZ);
         group.add(halo);
-      }
+
+        if (detailed) {
+          const label = labelSprite(about.flow[index].title, 4.6, 1.15);
+          label.position.set(localX, 3.2, localZ);
+          group.add(label);
+        }
+      });
       break;
     }
     case "avenue": {
-      for (let i = 0; i < 11; i += 1) {
-        const height = 1.4 + (i % 4) * 0.8;
+      for (let index = 0; index < JOB_LABELS.length; index += 1) {
+        const height = 1.4 + (index % 4) * 0.8;
+        const x = -4 + (index % 6) * 1.6;
+        const z = -3 + Math.floor(index / 6) * 2.4;
         const marker = new THREE.Mesh(new THREE.BoxGeometry(1.1, height, 1.1), dark);
-        marker.position.set(-4 + (i % 6) * 1.6, height / 2, -3 + Math.floor(i / 6) * 2.4);
+        marker.name = `job-${index}`;
+        marker.position.set(x, height / 2, z);
         addEdges(marker);
         group.add(marker);
+        if (detailed) {
+          const label = labelSprite(JOB_LABELS[index], 3.8, 0.95);
+          label.position.set(x, height + 0.75, z);
+          group.add(label);
+        }
       }
       break;
     }
     case "silos": {
-      for (let i = 0; i < 6; i += 1) {
-        const col = i % 3;
-        const row = Math.floor(i / 3);
-        const height = 3 + (i % 3) * 1.2;
+      const categories = Object.keys(skills);
+      for (let index = 0; index < categories.length; index += 1) {
+        const col = index % 3;
+        const row = Math.floor(index / 3);
+        const height = 3 + (index % 3) * 1.2;
+        const x = (col - 1) * 2.8;
+        const z = (row - 0.5) * 3;
         const silo = new THREE.Mesh(new THREE.CylinderGeometry(1.15, 1.15, height, 10), dark);
-        silo.position.set((col - 1) * 2.8, height / 2, (row - 0.5) * 3);
+        silo.position.set(x, height / 2, z);
         addEdges(silo, PALETTE.blue, 0.5);
         group.add(silo);
         const cap = new THREE.Mesh(new THREE.TorusGeometry(1.16, 0.07, 8, 24), blue);
         cap.rotation.x = -Math.PI / 2;
-        cap.position.set((col - 1) * 2.8, height, (row - 0.5) * 3);
+        cap.position.set(x, height, z);
         group.add(cap);
+        if (detailed) {
+          const label = labelSprite(categories[index], 4, 1);
+          label.position.set(x, height + 1.1, z);
+          group.add(label);
+        }
       }
       break;
     }
     case "library": {
-      for (let i = 0; i < 3; i += 1) {
-        const book = new THREE.Mesh(new THREE.BoxGeometry(1.5, 3 + i * 0.6, 3.4), dark);
-        book.position.set((i - 1) * 2, (3 + i * 0.6) / 2, 0);
+      const names = ["SENA", "CEVIDA", "Cursos"];
+      for (let index = 0; index < 3; index += 1) {
+        const height = 3 + index * 0.6;
+        const book = new THREE.Mesh(new THREE.BoxGeometry(1.5, height, 3.4), dark);
+        book.position.set((index - 1) * 2, height / 2, 0);
         addEdges(book);
         group.add(book);
+        if (detailed) {
+          const label = labelSprite(names[index], 3.6, 0.9);
+          label.position.set((index - 1) * 2, height + 0.8, 0);
+          group.add(label);
+        }
       }
       break;
     }
@@ -239,10 +281,14 @@ export function buildWorld(scene: THREE.Scene, quality: Quality): WorldBuild {
   );
   scene.add(routeLine);
 
+  const checkpoints: THREE.Mesh[] = [];
+  const checkpointHalos: THREE.Mesh[] = [];
+  const jobMarkers: THREE.Mesh[] = [];
+
   ZONES.forEach((zone) => {
     const group = new THREE.Group();
     group.position.set(zone.x, 0, zone.z);
-    buildStructure(zone, group);
+    buildStructure(zone, group, settings.accents);
 
     const label = labelSprite(zone.label);
     label.position.set(0, zone.kind === "antenna" ? 11 : zone.height + 2.2, 0);
@@ -260,6 +306,17 @@ export function buildWorld(scene: THREE.Scene, quality: Quality): WorldBuild {
         ),
       );
     }
+
+    CHECKPOINTS.forEach((_, index) => {
+      const beacon = group.getObjectByName(`checkpoint-${index}`);
+      const halo = group.getObjectByName(`checkpoint-halo-${index}`);
+      if (beacon instanceof THREE.Mesh) checkpoints.push(beacon);
+      if (halo instanceof THREE.Mesh) checkpointHalos.push(halo);
+    });
+    JOB_LABELS.forEach((_, index) => {
+      const marker = group.getObjectByName(`job-${index}`);
+      if (marker instanceof THREE.Mesh) jobMarkers.push(marker);
+    });
   });
 
   scene.add(new THREE.HemisphereLight(PALETTE.cloud, PALETTE.navy, 1.5));
@@ -277,5 +334,5 @@ export function buildWorld(scene: THREE.Scene, quality: Quality): WorldBuild {
   centerLight.position.set(0, 7, 0);
   scene.add(centerLight);
 
-  return { obstacles, markers };
+  return { obstacles, markers, checkpoints, checkpointHalos, jobMarkers };
 }
