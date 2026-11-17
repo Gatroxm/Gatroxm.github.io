@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gatroxm.github.io/sitemap.xml
