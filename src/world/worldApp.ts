@@ -1,8 +1,19 @@
 import * as THREE from "three";
+import { about } from "../data/content";
 import { getZonePanel, renderPanelHTML, type ZonePanel } from "../ui/panels";
-import { detectQuality, QUALITY, SPAWN, ZONES, type Quality } from "./constants";
+import { createAgentCircuit, type CircuitStep } from "./agentCircuit";
+import {
+  CHECKPOINTS,
+  detectQuality,
+  PALETTE,
+  QUALITY,
+  SPAWN,
+  ZONES,
+  type Quality,
+} from "./constants";
 import { createControls } from "./controls";
 import { buildWorld } from "./createWorld";
+import { createMinimap } from "./minimap";
 import { Vehicle } from "./vehicle";
 
 export interface WorldController {
@@ -36,6 +47,13 @@ export async function startWorld(): Promise<WorldController> {
   const panel = document.querySelector<HTMLElement>("[data-zone-panel]");
   const touch = document.querySelector<HTMLElement>("[data-touch]");
   const qualitySelect = document.querySelector<HTMLSelectElement>("[data-quality]");
+  const zoneCount = document.querySelector<HTMLElement>("[data-zone-count]");
+  const circuitCard = document.querySelector<HTMLElement>("[data-circuit-card]");
+  const circuitStatus = document.querySelector<HTMLElement>("[data-circuit-status]");
+  const circuitSteps = document.querySelector<HTMLElement>("[data-circuit-steps]");
+  const circuitDetail = document.querySelector<HTMLElement>("[data-circuit-detail]");
+  const mapButton = document.querySelector<HTMLButtonElement>('[data-action="map"]');
+  const circuitCloseButton = document.querySelector<HTMLElement>('[data-action="circuit-close"]');
 
   if (!canvas || !loading || !loadingBar || !loadingLabel || !hud || !hint || !panel) {
     throw new Error("Faltan elementos de la interfaz 3D");
@@ -106,7 +124,68 @@ export async function startWorld(): Promise<WorldController> {
     panel.hidden = false;
     panel.querySelector<HTMLButtonElement>('[data-action="close-panel"]')?.focus();
     hint.hidden = true;
+    if (zonePanel.id === "agentes") syncCircuit();
   };
+
+  const visitedZones = new Set<string>();
+  if (zoneCount) zoneCount.textContent = `0 / ${ZONES.length}`;
+
+  about.flow.forEach((step, index) => {
+    const item = document.createElement("li");
+    item.dataset.done = "false";
+    const number = document.createElement("span");
+    number.className = "circuit-step-num";
+    number.setAttribute("aria-hidden", "true");
+    number.textContent = String(index + 1);
+    const name = document.createElement("span");
+    name.textContent = step.title;
+    item.append(number, name);
+    circuitSteps?.append(item);
+  });
+
+  function circuitLabel(): string {
+    const count = circuit.visited.size;
+    return count === CHECKPOINTS.length
+      ? `Circuito completo · ${count} de ${CHECKPOINTS.length} pasos`
+      : `${count} de ${CHECKPOINTS.length} pasos completados`;
+  }
+
+  function syncCircuit(step?: CircuitStep) {
+    const label = circuitLabel();
+    if (circuitStatus) circuitStatus.textContent = label;
+    circuitSteps?.querySelectorAll("li").forEach((item, index) => {
+      item.dataset.done = String(circuit.visited.has(index));
+    });
+    const panelProgress = panel!.querySelector<HTMLElement>("[data-panel-circuit]");
+    if (panelProgress) panelProgress.textContent = label;
+    if (step && circuitDetail) {
+      circuitDetail.hidden = false;
+      circuitDetail.textContent = step.completed
+        ? `${step.title}: ${step.text} · ¡circuito completo!`
+        : `${step.title}: ${step.text}`;
+    }
+  }
+
+  const circuit = createAgentCircuit((step) => {
+    if (circuitCard) circuitCard.hidden = false;
+    syncCircuit(step);
+    world.checkpoints.forEach((beacon, index) => {
+      if (!circuit.visited.has(index)) return;
+      const material = beacon.material as THREE.MeshStandardMaterial;
+      material.emissiveIntensity = 1.4;
+      const halo = world.checkpointHalos[index];
+      if (halo) (halo.material as THREE.MeshBasicMaterial).color.setHex(PALETTE.cloud);
+    });
+  });
+
+  const syncMapButton = (open: boolean) => mapButton?.setAttribute("aria-pressed", String(open));
+  const minimap = createMinimap(syncMapButton);
+  const onMapClick = () => minimap.toggle();
+  const onCircuitClose = () => {
+    if (circuitCard) circuitCard.hidden = true;
+  };
+  mapButton?.addEventListener("click", onMapClick);
+  circuitCloseButton?.addEventListener("click", onCircuitClose);
 
   const controls = createControls({
     onInteract: () => {
@@ -114,17 +193,16 @@ export async function startWorld(): Promise<WorldController> {
       else if (nearestZoneId) openZone(nearestZoneId);
     },
     onRespawn: () => vehicle.respawn(),
-    onMap: () => {
-      /* El minimapa llega en la Fase 2. */
-    },
+    onMap: onMapClick,
     onJump: () => {
       /* El salto se aplica en vehicle.update. */
     },
   });
 
-  document.addEventListener("keydown", (event) => {
+  const onEscape = (event: KeyboardEvent) => {
     if (event.key === "Escape" && activePanel) closePanel();
-  });
+  };
+  document.addEventListener("keydown", onEscape);
 
   panel.addEventListener("click", (event) => {
     if ((event.target as HTMLElement).closest('[data-action="close-panel"]')) closePanel();
@@ -164,6 +242,7 @@ export async function startWorld(): Promise<WorldController> {
   const forward = new THREE.Vector3();
   const desired = new THREE.Vector3();
   const lookAt = new THREE.Vector3();
+  const markerWorld = new THREE.Vector3();
 
   const animate = () => {
     if (disposed) return;
@@ -172,6 +251,15 @@ export async function startWorld(): Promise<WorldController> {
     const dt = Math.min(clock.getDelta(), 0.05);
     const input = controls.read();
     vehicle.update(dt, input, world.obstacles, reducedMotion);
+
+    circuit.update(vehicle.position.x, vehicle.position.z);
+    minimap.update({
+      x: vehicle.position.x,
+      z: vehicle.position.z,
+      yaw: vehicle.group.rotation.y,
+      visitedZones,
+      visitedCheckpoints: circuit.visited,
+    });
 
     forward.set(Math.sin(vehicle.group.rotation.y), 0, Math.cos(vehicle.group.rotation.y));
     desired.copy(vehicle.position).addScaledVector(forward, -12.5);
@@ -193,6 +281,10 @@ export async function startWorld(): Promise<WorldController> {
 
     if (nearestDistance <= nearest.radius + 3) {
       nearestZoneId = nearest.id;
+      if (!visitedZones.has(nearest.id)) {
+        visitedZones.add(nearest.id);
+        if (zoneCount) zoneCount.textContent = `${visitedZones.size} / ${ZONES.length}`;
+      }
       if (!activePanel) {
         hint.textContent = `${nearest.label} · pulsa Enter o «Abrir» para ver el contenido`;
         hint.hidden = false;
@@ -200,6 +292,17 @@ export async function startWorld(): Promise<WorldController> {
     } else {
       nearestZoneId = null;
       hint.hidden = true;
+    }
+
+    for (const marker of world.jobMarkers) {
+      marker.getWorldPosition(markerWorld);
+      const distance = Math.hypot(
+        markerWorld.x - vehicle.position.x,
+        markerWorld.z - vehicle.position.z,
+      );
+      const target = distance < 4 ? 1.25 : 1;
+      const scale = marker.scale.x + (target - marker.scale.x) * 0.15;
+      marker.scale.setScalar(scale);
     }
 
     renderer.render(scene, camera);
@@ -218,6 +321,11 @@ export async function startWorld(): Promise<WorldController> {
     dispose() {
       disposed = true;
       controls.dispose();
+      circuit.dispose();
+      minimap.dispose();
+      mapButton?.removeEventListener("click", onMapClick);
+      circuitCloseButton?.removeEventListener("click", onCircuitClose);
+      document.removeEventListener("keydown", onEscape);
       window.removeEventListener("resize", onResize);
       scene.background = null;
       renderer.dispose();
