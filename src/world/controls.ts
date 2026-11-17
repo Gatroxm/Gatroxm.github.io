@@ -17,6 +17,20 @@ const KEY_BACK = new Set(["KeyS", "ArrowDown"]);
 const KEY_LEFT = new Set(["KeyA", "ArrowLeft"]);
 const KEY_RIGHT = new Set(["KeyD", "ArrowRight"]);
 
+/**
+ * Normaliza el evento para teclados, IME y automatización que envían `key`
+ * pero no `code` (por ejemplo, Enter desde CDP).
+ */
+function keyId(event: KeyboardEvent): string {
+  if (event.code) return event.code;
+  if (event.key === " ") return "Space";
+  if (event.key.length === 1) {
+    const letter = event.key.toUpperCase();
+    if (/^[A-Z]$/.test(letter)) return `Key${letter}`;
+  }
+  return event.key;
+}
+
 export function createControls(callbacks: ControlCallbacks): Controls {
   const keys = new Set<string>();
   let jumpQueued = false;
@@ -25,26 +39,27 @@ export function createControls(callbacks: ControlCallbacks): Controls {
   let stickY = 0;
 
   const onKeyDown = (event: KeyboardEvent) => {
+    const id = keyId(event);
     if (
-      KEY_FORWARD.has(event.code) || KEY_BACK.has(event.code) ||
-      KEY_LEFT.has(event.code) || KEY_RIGHT.has(event.code) ||
-      event.code === "Space"
+      KEY_FORWARD.has(id) || KEY_BACK.has(id) ||
+      KEY_LEFT.has(id) || KEY_RIGHT.has(id) ||
+      id === "Space" || id === "Enter"
     ) {
       event.preventDefault();
     }
     if (event.repeat) return;
-    keys.add(event.code);
-    if (event.code === "Space") {
+    keys.add(id);
+    if (id === "Space") {
       jumpQueued = true;
       callbacks.onJump();
     }
-    if (event.code === "Enter") callbacks.onInteract();
-    if (event.code === "KeyR") callbacks.onRespawn();
-    if (event.code === "KeyM") callbacks.onMap();
+    if (id === "Enter") callbacks.onInteract();
+    if (id === "KeyR") callbacks.onRespawn();
+    if (id === "KeyM") callbacks.onMap();
   };
 
   const onKeyUp = (event: KeyboardEvent) => {
-    keys.delete(event.code);
+    keys.delete(keyId(event));
   };
 
   const onBlur = () => keys.clear();

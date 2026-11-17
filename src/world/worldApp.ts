@@ -145,7 +145,10 @@ export async function startWorld(): Promise<WorldController> {
     lastFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     panel.innerHTML = renderPanelHTML(zonePanel);
     panel.hidden = false;
-    panel.querySelector<HTMLButtonElement>('[data-action="close-panel"]')?.focus();
+    const closeButton = panel.querySelector<HTMLButtonElement>('[data-action="close-panel"]');
+    requestAnimationFrame(() => {
+      if (!panel.hidden) closeButton?.focus();
+    });
     hint.hidden = true;
     if (zonePanel.id === "agentes") syncCircuit();
   };
