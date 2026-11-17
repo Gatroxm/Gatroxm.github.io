@@ -1,72 +1,84 @@
-# GatroxM.dev — Portafolio de Gustavo Adolfo Muñoz Reyes
+# GatroxM.dev — Portafolio 3D
 
-Sitio estático de una sola página con HTML, CSS y JavaScript (módulos ES). No
-necesita build, dependencias ni backend. Se publica con GitHub Pages desde
-`docs/`, igual que la versión anterior, así que no hay que cambiar la
-configuración del repositorio.
+Portafolio interactivo de Gustavo Adolfo Muñoz Reyes. El visitante puede explorar
+un mundo 3D con siete zonas o leer la hoja de vida clásica, sin jugar ni esperar.
+Sitio 100 % estático: Vite + TypeScript + Three.js, sin backend ni recursos
+externos.
 
-## Estructura
+## Requisitos
 
-```
-docs/index.html                  Estructura, SEO, hero y secciones
-docs/css/styles.css              Sistema de diseño, temas y responsive
-docs/js/main.js                  Render del contenido e interacciones
-docs/data/content.js             Todo el contenido editable
-docs/assets/favicon.svg          Favicon
-docs/assets/og-image.png         Imagen para Open Graph
-docs/Hoja_de_Vida_...pdf         Hoja de vida descargable
-docs/.nojekyll                   Evita el procesamiento de Jekyll
-prototype/index.html             Prototipo original de referencia
+Node.js 20 o superior.
+
+## Desarrollo
+
+```bash
+npm install
+npm run dev
 ```
 
-El proyecto Angular anterior sigue intacto en la raíz del repositorio y en la
-rama `legacy-angular`.
+Abre la URL que muestra Vite (normalmente `http://localhost:5173/`).
+Añade `#world` a la URL para entrar directamente en la experiencia 3D.
+
+## Producción
+
+```bash
+npm run build          # genera dist/
+npm run preview        # sirve dist/ en local
+npm run sync:docs      # copia dist/ a docs/ (Pages rama actual)
+```
 
 ## Editar el contenido
 
-- **Datos y textos de secciones:** `docs/data/content.js` (perfil, cifras, sobre
-  mí, habilidades, experiencia, formación y contacto).
-- **Hero, títulos de sección y metadatos:** `docs/index.html`.
-- **Colores, tipografía y espaciados:** variables y reglas en
-  `docs/css/styles.css`.
+Todo el contenido está en **`src/data/content.ts`**:
 
-Después de editar, recarga el navegador; no hay compilación.
+- `profile`: nombre, roles, ubicación y frase del hero.
+- `stats`, `about`, `skills`, `experience`, `education`, `courses`, `contact`.
+- `resumeHref`: ruta del PDF descargable.
 
-## Probar en local
+Los textos se inyectan en el HTML durante el build
+(`plugins/static-content.ts`), de modo que el modo clásico existe en el DOM
+servido y es legible para SEO, ATS y lectores de pantalla. Los paneles de las
+zonas 3D usan los mismos datos (`src/ui/fragments.ts` y `src/ui/panels.ts`).
 
-Los módulos ES no funcionan abriendo el archivo con `file://`. Usa un servidor
-estático apuntando a `docs/`:
+## Controles
 
-```bash
-npx serve docs
-# o
-python -m http.server 8080 --directory docs
-```
+| Acción | Teclado | Gamepad | Táctil |
+| --- | --- | --- | --- |
+| Moverse | WASD / flechas | Stick izquierdo | Joystick |
+| Acelerar | Shift | RB / RT | — |
+| Saltar | Espacio | X | Botón «Saltar» |
+| Interactuar | Enter | A | Botón «Abrir» |
+| Reaparecer | R | B | Botón «Atascado» |
+| Mapa | M | Y | Fase 2 |
 
-Luego abre `http://localhost:3000` o `http://localhost:8080`.
+## Publicación en GitHub Pages
 
-## Publicar en GitHub Pages
+Hay dos mecanismos compatibles:
 
-No hay que tocar la configuración de Pages: el sitio vive en `docs/`, que es la
-carpeta que el repositorio ya publica.
+1. **Workflow (recomendado):** `.github/workflows/deploy.yml` construye `dist/`
+   y lo despliega en cada push a `main`. Requiere que en
+   **Settings → Pages → Source** esté seleccionado **GitHub Actions**.
+2. **Rama actual:** mientras Pages apunte a `main /docs`, ejecuta
+   `npm run sync:docs` antes de subir para publicar el mismo build en `docs/`.
 
-1. Integra los cambios de `portfolio-v2` en `main` y haz push.
-2. GitHub Pages publica `main /docs` automáticamente.
-
-El archivo `docs/.nojekyll` evita que Jekyll procese el sitio.
+El archivo `public/404.html` y `docs/.nojekyll` se incluyen en el build.
+La URL pública es `https://gatroxm.github.io/`.
 
 ## Ramas
 
-- `portfolio-v2`: sitio estático actual, dentro de `docs/`.
-- `legacy-angular`: versión anterior del portafolio en Angular 22, conservada
-  como referencia.
+- `portfolio-3d`: este proyecto.
+- `portfolio-v2`: portafolio estático anterior (sin 3D).
+- `legacy-angular`: portafolio original en Angular 22.
 
-## Accesibilidad y rendimiento
+## Paleta y accesibilidad
 
-- HTML semántico, un solo `h1`, jerarquía de encabezados y enlaces de salto.
-- Acordeones con `aria-expanded` y `aria-controls`, navegación completa por
-  teclado y foco visible.
-- Tema claro/oscuro con `prefers-color-scheme`; si `localStorage` falla, la
-  página sigue funcionando.
-- Animaciones desactivadas con `prefers-reduced-motion`.
-- Sin fuentes, scripts ni imágenes externas.
+Solo se usan Midnight Navy `#0F172A`, Electric Blue `#2563EB`, Slate Dark
+`#1E293B`, Cloud Gray `#F1F5F9`, Pure White `#FFFFFF` y Slate Gray `#64748B`.
+El modo clásico es accesible por teclado, con foco visible y contraste AA.
+Si no hay WebGL, el dispositivo es limitado o falla la carga, se muestra el
+modo clásico automáticamente. Se respeta `prefers-reduced-motion`.
+
+## Créditos
+
+La geometría es procedural y original; no se usan modelos, texturas, fuentes,
+música ni imágenes de terceros. Consulta `CREDITS.md` para licencias.
