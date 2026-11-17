@@ -17,8 +17,8 @@ export interface AgentCircuit {
   dispose(): void;
 }
 
-const TRIGGER_RADIUS = 3;
-const RESET_MARGIN = 1.4;
+const TRIGGER_RADIUS_SQ = 9;
+const RESET_RADIUS_SQ = (3 + 1.4) ** 2;
 
 /**
  * Circuito Requerimiento → MCP → Graphify → Implementación.
@@ -34,9 +34,11 @@ export function createAgentCircuit(onStep: (step: CircuitStep) => void): AgentCi
     update(x, z) {
       for (let i = 0; i < CHECKPOINTS.length; i += 1) {
         const checkpoint = CHECKPOINTS[i];
-        const distance = Math.hypot(checkpoint.x - x, checkpoint.z - z);
+        const dx = checkpoint.x - x;
+        const dz = checkpoint.z - z;
+        const distanceSq = dx * dx + dz * dz;
 
-        if (distance <= TRIGGER_RADIUS) {
+        if (distanceSq <= TRIGGER_RADIUS_SQ) {
           if (!inside[i]) {
             inside[i] = true;
             if (!visited.has(i)) {
@@ -51,7 +53,7 @@ export function createAgentCircuit(onStep: (step: CircuitStep) => void): AgentCi
               });
             }
           }
-        } else if (distance > TRIGGER_RADIUS + RESET_MARGIN) {
+        } else if (distanceSq > RESET_RADIUS_SQ) {
           inside[i] = false;
         }
       }

@@ -40,6 +40,7 @@ export function createMinimap(onToggle?: (open: boolean) => void): Minimap {
   const container = document.querySelector<HTMLElement>("[data-minimap]");
   const canvas = document.querySelector<HTMLCanvasElement>("[data-minimap-canvas]");
   const closeButton = document.querySelector<HTMLElement>('[data-action="map-close"]');
+  const summary = document.querySelector<HTMLElement>("[data-minimap-summary]");
 
   if (!container || !canvas) {
     return {
@@ -69,6 +70,7 @@ export function createMinimap(onToggle?: (open: boolean) => void): Minimap {
   let open = false;
   let lastDraw = 0;
   let latest: MinimapState | null = null;
+  let lastSummary = "";
   let disposed = false;
 
   const onClose = () => toggle(false);
@@ -194,6 +196,11 @@ export function createMinimap(onToggle?: (open: boolean) => void): Minimap {
     update(state) {
       if (disposed || !open) return;
       latest = state;
+      const text = `Zonas exploradas: ${state.visitedZones.size} de ${ZONES.length}. Circuito de agentes: ${state.visitedCheckpoints.size} de ${CHECKPOINTS.length} pasos.`;
+      if (summary && text !== lastSummary) {
+        lastSummary = text;
+        summary.textContent = text;
+      }
       const now = performance.now();
       if (now - lastDraw >= 50) {
         lastDraw = now;
