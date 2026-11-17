@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Gustavo Muñoz · Desarrollador Full Stack Senior · GatroxM.dev</title>
+  <meta name="description" content="Portafolio 3D de Gustavo Adolfo Muñoz Reyes: más de 12 años en .NET, Angular y Azure, y hoy llevando los agentes de IA con MCP al desarrollo de software.">
+  <meta name="author" content="Gustavo Adolfo Muñoz Reyes">
+  <meta name="theme-color" content="#0F172A">
+  <link rel="canonical" href="https://gatroxm.github.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_CO">
+  <meta property="og:site_name" content="GatroxM.dev">
+  <meta property="og:title" content="Gustavo Muñoz · Desarrollador Full Stack Senior · GatroxM.dev">
+  <meta property="og:description" content="Explora un mundo 3D con la trayectoria de Gustavo Adolfo Muñoz Reyes: .NET, Angular, Azure y agentes de IA con MCP.">
+  <meta property="og:url" content="https://gatroxm.github.io/">
+  <meta property="og:image" content="https://gatroxm.github.io/og-image.png">
+  <meta property="og:image:alt" content="GatroxM.dev — Gustavo Adolfo Muñoz Reyes, desarrollador Full Stack Senior">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Gustavo Muñoz · Desarrollador Full Stack Senior · GatroxM.dev">
+  <meta name="twitter:description" content="Mundo 3D y hoja de vida interactiva de Gustavo Adolfo Muñoz Reyes.">
+  <meta name="twitter:image" content="https://gatroxm.github.io/og-image.png">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Gustavo Adolfo Muñoz Reyes",
+    "alternateName": "GatroxM.dev",
+    "jobTitle": "Desarrollador Full Stack Senior",
+    "email": "mailto:tavoxpau@gmail.com",
+    "telephone": "+573133976999",
+    "url": "https://gatroxm.github.io/",
+    "address": { "@type": "PostalAddress", "addressLocality": "Bello", "addressRegion": "Antioquia", "addressCountry": "CO" },
+    "sameAs": ["https://github.com/gatroxm", "https://www.linkedin.com/in/gustavo-adolfo-mu%C3%B1oz-reyes-a277b587/"]
+  }
+  </script>
+</head>
+<body data-mode="entry">
+  <section class="entry" id="entry" aria-labelledby="entry-title">
+    <div class="entry-inner">
+      <p class="entry-brand">&lt;/&gt; Gatrox<span>M</span>.dev</p>
+      <p class="eyebrow">Portafolio interactivo</p>
+      <h2 id="entry-title">Gustavo Adolfo Muñoz Reyes</h2>
+      <p class="entry-role">Desarrollador Full Stack Senior · .NET, Angular, Azure y agentes de IA con MCP</p>
+      <p class="entry-copy">Explora un pequeño mundo tecnológico o lee la hoja de vida directamente. Tú eliges.</p>
+      <div class="entry-actions">
+        <button class="btn btn-primary btn-lg" type="button" data-action="explore">Explorar en 3D <span aria-hidden="true">→</span></button>
+        <button class="btn btn-lg" type="button" data-action="classic">Ver hoja de vida rápida</button>
+      </div>
+      <p class="entry-foot">Sin rastreadores · Contenido disponible siempre en HTML</p>
+    </div>
+    <div class="entry-grid" aria-hidden="true"></div>
+  </section>
+
+  <section class="world" id="world" aria-label="Mundo 3D del portafolio" hidden>
+    <canvas id="scene" aria-label="Vista 3D de la isla del portafolio"></canvas>
+
+    <div class="loading" id="loading" role="status" aria-live="polite">
+      <p class="loading-brand">&lt;/&gt; GatroxM.dev</p>
+      <p class="loading-text" data-loading-label>Construyendo el mundo…</p>
+      <div class="loading-track"><div class="loading-bar" data-loading-bar></div></div>
+    </div>
+
+    <div class="hud" data-hud hidden>
+      <div class="hud-brand">&lt;/&gt; Gatrox<span>M</span>.dev</div>
+      <div class="hud-actions">
+        <button class="hud-btn" type="button" data-action="classic">Hoja de vida</button>
+        <label class="hud-select">Calidad
+          <select data-quality aria-label="Calidad gráfica">
+            <option value="auto">Automática</option>
+            <option value="alta">Alta</option>
+            <option value="media">Media</option>
+            <option value="baja">Baja</option>
+          </select>
+        </label>
+        <button class="hud-btn" type="button" data-action="respawn" title="Volver al inicio (R)">Atascado</button>
+        <button class="hud-btn" type="button" data-action="map" aria-pressed="false" hidden>Mapa (M)</button>
+      </div>
+    </div>
+
+    <div class="zone-hint" data-zone-hint hidden></div>
+
+    <aside class="zone-panel" data-zone-panel role="dialog" aria-modal="false" aria-labelledby="panel-title" hidden></aside>
+
+    <div class="touch-controls" data-touch hidden aria-hidden="true">
+      <div class="joystick" data-joystick><div class="joystick-knob" data-joystick-knob></div></div>
+      <div class="touch-buttons">
+        <button type="button" data-action="jump">Saltar</button>
+        <button type="button" data-action="interact">Abrir</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="classic" class="classic" hidden>
+    <!-- CLASSIC_CONTENT -->
+  </div>
+
+  <noscript>
+    <div class="noscript-notice">
+      <p>Este portafolio usa JavaScript para la experiencia 3D. Toda la información profesional está disponible abajo.</p>
+    </div>
+  </noscript>
+
+  <div class="toast" data-global-toast role="status" aria-live="polite"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
