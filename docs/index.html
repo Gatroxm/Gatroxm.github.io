@@ -35,8 +35,8 @@
     "sameAs": ["https://github.com/gatroxm", "https://www.linkedin.com/in/gustavo-adolfo-mu%C3%B1oz-reyes-a277b587/"]
   }
   </script>
-  <script type="module" crossorigin src="/assets/index-B5tpMUC_.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-FwJ3iG8k.css">
+  <script type="module" crossorigin src="/assets/index-CtxBwIpN.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BSWwidY_.css">
 </head>
 <body data-mode="entry">
   <section class="entry" id="entry" aria-labelledby="entry-title">
@@ -66,6 +66,10 @@
 
     <div class="hud" data-hud hidden>
       <div class="hud-brand">&lt;/&gt; Gatrox<span>M</span>.dev</div>
+      <div class="hud-progress" aria-live="polite">
+        <span class="hud-progress-label">Zonas exploradas</span>
+        <strong data-zone-count>0 / 7</strong>
+      </div>
       <div class="hud-actions">
         <button class="hud-btn" type="button" data-action="classic">Hoja de vida</button>
         <label class="hud-select">Calidad
@@ -77,11 +81,34 @@
           </select>
         </label>
         <button class="hud-btn" type="button" data-action="respawn" title="Volver al inicio (R)">Atascado</button>
-        <button class="hud-btn" type="button" data-action="map" aria-pressed="false" hidden>Mapa (M)</button>
+        <button class="hud-btn" type="button" data-action="map" aria-pressed="false" aria-controls="minimap">Mapa (M)</button>
       </div>
     </div>
 
     <div class="zone-hint" data-zone-hint hidden></div>
+
+    <aside class="circuit-card" data-circuit-card aria-live="polite" hidden>
+      <div class="circuit-head">
+        <div>
+          <p class="eyebrow">Circuito de agentes</p>
+          <h3>Camino del requerimiento al código</h3>
+        </div>
+        <button class="icon-btn" type="button" data-action="circuit-close" aria-label="Cerrar tarjeta del circuito">✕</button>
+      </div>
+      <p class="circuit-status" data-circuit-status>0 de 4 pasos completados</p>
+      <ol class="circuit-steps" data-circuit-steps></ol>
+      <p class="circuit-detail" data-circuit-detail hidden></p>
+    </aside>
+
+    <aside class="minimap" id="minimap" data-minimap aria-label="Minimapa de la isla" hidden>
+      <div class="minimap-head">
+        <strong>Mapa de la isla</strong>
+        <button class="icon-btn" type="button" data-action="map-close" aria-label="Cerrar minimapa">✕</button>
+      </div>
+      <canvas data-minimap-canvas width="220" height="220" role="img" aria-label="Zonas, ruta y posición actual en la isla"></canvas>
+      <p class="minimap-legend"><span class="dot dot--visited"></span> Explorado <span class="dot dot--pending"></span> Pendiente</p>
+      <p class="minimap-hint">Pulsa M para cerrar.</p>
+    </aside>
 
     <aside class="zone-panel" data-zone-panel role="dialog" aria-modal="false" aria-labelledby="panel-title" hidden></aside>
 
@@ -342,6 +369,6 @@
     </div>
   </noscript>
 
-  <div class="toast" data-global-toast role="status" aria-live="polite"></div>
+  <div class="toast" data-global-toast role="status" aria-live="polite"></div>
 </body>
 </html>
