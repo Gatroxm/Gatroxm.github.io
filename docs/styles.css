@@ -54,7 +54,7 @@ body::after {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  color: var(--gray);
+  color: var(--cloud);
   font-size: 0.82rem;
   letter-spacing: 0.04em;
 }
@@ -82,7 +82,7 @@ main {
 
 .eyebrow {
   margin: 0 0 12px;
-  color: var(--blue);
+  color: var(--cloud);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -207,7 +207,7 @@ h1 {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--gray);
+  color: var(--cloud);
 }
 
 .social a {
