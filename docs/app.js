@@ -30,9 +30,13 @@
   };
 
   const copyWithFallback = async (text) => {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(text);
-      return;
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+    } catch {
+      /* Algunos navegadores bloquean Clipboard API; se usa el respaldo. */
     }
     const area = document.createElement("textarea");
     area.value = text;
@@ -41,8 +45,9 @@
     area.style.opacity = "0";
     document.body.append(area);
     area.select();
-    document.execCommand("copy");
+    const copied = document.execCommand("copy");
     area.remove();
+    if (!copied) throw new Error("No se pudo copiar");
   };
 
   copyButton?.addEventListener("click", async () => {
