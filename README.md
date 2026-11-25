@@ -1,84 +1,87 @@
-# GatroxM.dev — Portafolio 3D
+# GatroxM.dev — carta de presentación
 
-Portafolio interactivo de Gustavo Adolfo Muñoz Reyes. El visitante puede explorar
-un mundo 3D con siete zonas o leer la hoja de vida clásica, sin jugar ni esperar.
-Sitio 100 % estático: Vite + TypeScript + Three.js, sin backend ni recursos
-externos.
+Sitio estático de una sola página con la carta de presentación de Gustavo Adolfo
+Muñoz Reyes. El portafolio completo vive en <https://gatroxm-dev.onrender.com/>.
 
-## Requisitos
+**Todo el sitio publicable está en `docs/`.** No hay copia en la raíz, ni paso de
+compilación, ni scripts de sincronización.
 
-Node.js 20 o superior.
+## Ver en local
 
-## Desarrollo
-
-```bash
-npm install
-npm run dev
-```
-
-Abre la URL que muestra Vite (normalmente `http://localhost:5173/`).
-Añade `#world` a la URL para entrar directamente en la experiencia 3D.
-
-## Producción
+Elige una opción:
 
 ```bash
-npm run build          # genera dist/
-npm run preview        # sirve dist/ en local
-npm run sync:docs      # copia dist/ a docs/ (Pages rama actual)
+python -m http.server 4173 --directory docs
+# o
+npx serve docs -l 4173
 ```
+
+Abre <http://localhost:4173>.
 
 ## Editar el contenido
 
-Todo el contenido está en **`src/data/content.ts`**:
+| Archivo | Qué contiene |
+| --- | --- |
+| `docs/index.html` | Texto de la carta, metadatos, Open Graph, JSON-LD y botones. |
+| `docs/styles.css` | Paleta, cuadrícula, tarjeta, tipografía y animaciones CSS. |
+| `docs/app.js` | URL del portafolio, correo y botón «Copiar». |
+| `docs/404.html` | Página de error con enlaces a la carta y al portafolio. |
+| `docs/favicon.svg` | Icono SVG. |
+| `docs/og-image.png` | Imagen social de 1200 × 630 px. |
+| `docs/Hoja_de_Vida_Gustavo_Munoz_GatroxM.pdf` | Hoja de vida descargable. |
+| `docs/robots.txt` / `docs/sitemap.xml` | SEO. |
 
-- `profile`: nombre, roles, ubicación y frase del hero.
-- `stats`, `about`, `skills`, `experience`, `education`, `courses`, `contact`.
-- `resumeHref`: ruta del PDF descargable.
+### URLs y correo
 
-Los textos se inyectan en el HTML durante el build
-(`plugins/static-content.ts`), de modo que el modo clásico existe en el DOM
-servido y es legible para SEO, ATS y lectores de pantalla. Los paneles de las
-zonas 3D usan los mismos datos (`src/ui/fragments.ts` y `src/ui/panels.ts`).
+La URL del portafolio y el correo están **una sola vez**, como constantes al
+inicio de `docs/app.js`:
 
-## Controles
+```js
+const PORTFOLIO_URL = "https://gatroxm-dev.onrender.com/";
+const EMAIL = "tavoxpau@gmail.com";
+```
 
-| Acción | Teclado | Gamepad | Táctil |
-| --- | --- | --- | --- |
-| Moverse | WASD / flechas | Stick izquierdo | Joystick |
-| Acelerar | Shift | RB / RT | — |
-| Saltar | Espacio | X | Botón «Saltar» |
-| Interactuar | Enter | A | Botón «Abrir» |
-| Reaparecer | R | B | Botón «Atascado» |
-| Mapa | M | Y | Fase 2 |
+Los botones y enlaces se llenan desde ahí. No hay redirección automática: el
+botón principal abre el portafolio en la misma pestaña solo al pulsarlo.
 
-## Publicación en GitHub Pages
+### Hoja de vida
 
-Hay dos mecanismos compatibles:
+Para actualizar el PDF, reemplaza
+`docs/Hoja_de_Vida_Gustavo_Munoz_GatroxM.pdf`. El botón usa el atributo
+`download` y apunta a ese archivo.
 
-1. **Workflow (recomendado):** `.github/workflows/deploy.yml` construye `dist/`
-   y lo despliega en cada push a `main`. Requiere que en
-   **Settings → Pages → Source** esté seleccionado **GitHub Actions**.
-2. **Rama actual:** mientras Pages apunte a `main /docs`, ejecuta
-   `npm run sync:docs` antes de subir para publicar el mismo build en `docs/`.
+### Imagen Open Graph
 
-El archivo `public/404.html` y `docs/.nojekyll` se incluyen en el build.
-La URL pública es `https://gatroxm.github.io/`.
+`docs/og-image.png` se generó una sola vez con `sharp` como dependencia de
+desarrollo. Publicar el sitio **no requiere npm**. Para regenerarla, instala las
+herramientas de desarrollo y rasteriza un SVG de 1200 × 630 con la misma paleta:
+
+```bash
+npm install
+node -e "require('sharp')('OG.svg').png().toFile('docs/og-image.png')"
+```
+
+## Diseño y accesibilidad
+
+Se usan solo los colores de marca: `#0F172A`, `#2563EB`, `#1E293B`, `#F1F5F9`,
+`#FFFFFF` y `#64748B`. La tipografía es del sistema; no hay imágenes externas,
+CDNs, analíticas, cookies ni almacenamiento. Se respeta
+`prefers-reduced-motion`.
+
+## Publicación
+
+La fuente activa de GitHub Pages la define el propietario en Settings → Pages:
+
+- Si es **`main /docs`**, basta con subir `main` con `docs/` actualizado. El
+  workflow `deploy.yml` debe eliminarse en ese caso.
+- Si es **GitHub Actions**, conservar `.github/workflows/deploy.yml` y cambiar
+  el paso de subida para publicar `docs/` sin compilar.
+
+Mientras tanto, el workflow no se modifica. La URL pública es
+<https://gatroxm.github.io/>.
 
 ## Ramas
 
-- `portfolio-3d`: este proyecto.
-- `portfolio-v2`: portafolio estático anterior (sin 3D).
-- `legacy-angular`: portafolio original en Angular 22.
-
-## Paleta y accesibilidad
-
-Solo se usan Midnight Navy `#0F172A`, Electric Blue `#2563EB`, Slate Dark
-`#1E293B`, Cloud Gray `#F1F5F9`, Pure White `#FFFFFF` y Slate Gray `#64748B`.
-El modo clásico es accesible por teclado, con foco visible y contraste AA.
-Si no hay WebGL, el dispositivo es limitado o falla la carga, se muestra el
-modo clásico automáticamente. Se respeta `prefers-reduced-motion`.
-
-## Créditos
-
-La geometría es procedural y original; no se usan modelos, texturas, fuentes,
-música ni imágenes de terceros. Consulta `CREDITS.md` para licencias.
+- `archive-3d`: versión 3D completa, con Three.js, chatbot y mascota.
+- `cover-letter`: carta estática actual.
+- `main`: rama de publicación; no se fusiona sin aprobación.

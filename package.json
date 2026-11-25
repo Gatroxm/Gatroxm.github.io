@@ -1,25 +1,9 @@
 {
-  "name": "gatroxm-portfolio-3d",
+  "name": "gatroxm-cover-letter",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
-  "description": "Portafolio 3D interactivo de Gustavo Adolfo Muñoz Reyes",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview",
-    "sync:docs": "node scripts/sync-docs.mjs"
-  },
-  "dependencies": {
-    "three": "^0.180.0"
-  },
+  "description": "Carta de presentación estática de Gustavo Adolfo Muñoz Reyes",
   "devDependencies": {
-    "@types/three": "^0.180.0",
-    "esbuild": "^0.25.10",
-    "typescript": "^5.9.2",
-    "vite": "^7.1.7"
-  },
-  "engines": {
-    "node": ">=20"
+    "sharp": "^0.35.5"
   }
 }
